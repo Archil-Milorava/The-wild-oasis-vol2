@@ -2,11 +2,13 @@
 import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import Filter from "../_components/Filter";
+import ReservationReminder from "../_components/ReservationReminder";
 
 export const metadata = {
   title: "Cabins"
 }
 
+export const revalidate = 0;
 
 
 export default  function Page({searchParams}) {
@@ -30,6 +32,7 @@ const filter = searchParams?.capacity ?? "all"
       <Filter />
       </div>
 <Suspense>
+  <ReservationReminder />
     <CabinList filter={filter} key={filter} />
 </Suspense>
     </div>
