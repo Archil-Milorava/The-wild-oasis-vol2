@@ -1,20 +1,21 @@
+import Reservations from "@/app/_components/Reservations";
+import Spinner from "@/app/_components/Spinner";
 import TextExpander from "@/app/_components/TextExpander";
-import { getCabin } from "@/app/_lib/data-service";
+import { getBookedDatesByCabinId, getCabin, getSettings } from "@/app/_lib/data-service";
 import { EyeSlashIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/solid";
+import { Suspense } from "react";
 
-export async function generateMetadata({params}){
-    const { name } = await getCabin(params.cabinId);
-
-    return { title: `Cabin ${name}` }
-
+export async function generateMetadata({ params }) {
+  const { name } = await getCabin(params.cabinId);
+  return { title: `Cabin ${name}` };
 }
 
 export default async function Page({ params }) {
-  
-    const cabin = await getCabin(params.cabinId)
+  const cabin = await getCabin(params.cabinId);
 
-    const { id, name, maxCapacity, regularPrice, discount, image, description } =
-    cabin;
+
+
+  const { id, name, maxCapacity, regularPrice, discount, image, description } = cabin;
 
   return (
     <div className="max-w-6xl mx-auto mt-8">
@@ -25,14 +26,12 @@ export default async function Page({ params }) {
 
         <div>
           <h3 className="text-accent-100 font-black text-7xl mb-5 translate-x-[-254px] bg-primary-950 p-6 pb-1 w-[150%]">
-             {name}
+            {name}
           </h3>
 
           <p className="text-sm  text-primary-300 mb-10 ">
-            <TextExpander>
-            {description}
-            </TextExpander>
-            </p>
+            <TextExpander>{description}</TextExpander>
+          </p>
 
           <ul className="flex flex-col gap-4 mb-7">
             <li className="flex gap-3 items-center">
@@ -60,9 +59,12 @@ export default async function Page({ params }) {
       </div>
 
       <div>
-        <h2 className="text-5xl font-semibold text-center">
-          Reserve today. Pay on arrival.
+        <h2 className="text-5xl font-semibold text-center mb-8 text-accent-400">
+          Reserve today {name}. Pay on arrival.
         </h2>
+        <Suspense fallback={<Spinner />}>
+        <Reservations cabin={cabin} />
+        </Suspense>
       </div>
     </div>
   );

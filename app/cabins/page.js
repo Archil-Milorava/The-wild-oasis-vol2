@@ -1,6 +1,7 @@
 
 import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
+import Filter from "../_components/Filter";
 
 export const metadata = {
   title: "Cabins"
@@ -8,7 +9,9 @@ export const metadata = {
 
 
 
-export default  function Page() {
+export default  function Page({searchParams}) {
+
+const filter = searchParams?.capacity ?? "all"
 
   return (
     <div>
@@ -23,8 +26,11 @@ export default  function Page() {
         away from home. The perfect spot for a peaceful, calm vacation. Welcome
         to paradise.
       </p>
+      <div className="flex justify-end mb-8">
+      <Filter />
+      </div>
 <Suspense>
-    <CabinList />
+    <CabinList filter={filter} key={filter} />
 </Suspense>
     </div>
   );
